@@ -4,8 +4,8 @@ import io.realm.RealmObject
 
 open class ImageItemDto(
     var id: Long = 0,
-    var queryValue: String? = null,
-    var url: String? = null
+    var queryValue: String = "",
+    var url: String = ""
 ) : RealmObject() {
 
     fun init(rawItem: ImageItemDto) {
