@@ -11,7 +11,5 @@ fun ImageItemResponse.toImage(queryValue: String): ImageItem {
 }
 
 fun List<ImageItemResponse>.toImages(queryValue: String): List<ImageItem> {
-    return this.map {
-        it.toImage(queryValue)
-    }
+    return this.map { it.toImage(queryValue) }
 }

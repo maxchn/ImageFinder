@@ -1,12 +1,56 @@
 package com.imagefinder.features.featuresMain
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.inputmethod.EditorInfo
 import com.imagefinder.R
+import com.imagefinder.core.presentation.activity.BindingActivity
+import com.imagefinder.databinding.ActivityMainBinding
+import com.imagefinder.features.featuresMain.common.ImagesAdapter
+import kotlinx.android.synthetic.main.activity_main.*
+import org.kodein.di.generic.instance
+import timber.log.Timber
+import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BindingActivity<ActivityMainBinding>() {
+
+    override fun getLayoutRes(): Int = R.layout.activity_main
+
+    override fun diModule() = MainModule.get()
+
+    override val viewModel: MainContract.ViewModel by instance()
+
+    private val adapter: ImagesAdapter by instance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        rv_search_history.adapter = adapter
+
+        edit_text_query.setOnEditorActionListener { _, actionId, _ ->
+            return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_GO) {
+                viewModel.searchImage(edit_text_query.text.toString())
+                true
+            } else {
+                false
+            }
+        }
+
+        viewModel.images.observe(this, {
+            if (it.isNotEmpty()) {
+                adapter.update(it)
+            }
+        })
+
+        viewModel.message.observe(this, {
+            it?.let {
+                showToast(it)
+            }
+        })
+
+        viewModel.newImageItem.observe(this, {
+            it?.let { newImageItem ->
+                adapter.add(newImageItem)
+            }
+        })
     }
 }

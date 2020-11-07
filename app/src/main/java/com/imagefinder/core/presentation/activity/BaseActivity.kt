@@ -1,6 +1,7 @@
 package com.imagefinder.core.presentation.activity
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 import org.kodein.di.Kodein
@@ -27,4 +28,8 @@ abstract class BaseActivity : AppCompatActivity(), KodeinAware {
     }
 
     abstract fun diModule(): Kodein.Module
+
+    fun showToast(value: String) {
+        Toast.makeText(applicationContext, value, Toast.LENGTH_LONG).show()
+    }
 }

@@ -4,9 +4,8 @@ import com.imagefinder.core.domain.BaseGateway
 import com.imagefinder.core.domain.NetworkManager
 import com.imagefinder.core.presentation.mapDataIfSuccess
 import com.imagefinder.domain.common.mapper.local.toImageItemDto
-import com.imagefinder.domain.entity.ImageItem
 import com.imagefinder.domain.common.mapper.remote.toImages
-import com.imagefinder.storage.local.data.ImageItemDto
+import com.imagefinder.domain.entity.ImageItem
 import com.imagefinder.storage.remote.repository.common.error.BaseError
 import com.imagefinder.storage.remote.repository.common.error.NetworkError
 import io.reactivex.Observable
@@ -42,7 +41,7 @@ class ImageGateway(
         local.upsert(imageItem.toImageItemDto())
     }
 
-    override fun getAllImages(): Observable<List<ImageItemDto>> {
+    override fun getAllImages(): Observable<List<ImageItem>> {
         return local.getAll()
     }
 

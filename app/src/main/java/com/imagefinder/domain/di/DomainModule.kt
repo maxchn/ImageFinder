@@ -1,5 +1,6 @@
 package com.imagefinder.domain.di
 
+import com.imagefinder.core.domain.NetworkManager
 import com.imagefinder.domain.gateway.image.IImageGateway
 import com.imagefinder.domain.gateway.image.ImageGateway
 import com.imagefinder.domain.use_case.image.ImageInteractor
@@ -8,14 +9,16 @@ import org.kodein.di.Kodein
 import org.kodein.di.generic.bind
 import org.kodein.di.generic.instance
 import org.kodein.di.generic.provider
+import org.kodein.di.generic.singleton
 
 object DomainModule {
 
     fun get() = Kodein.Module("DomainModule") {
 
+        bind() from singleton { NetworkManager() }
+
         applyUseCaseModule()
         applyGatewayModule()
-
     }
 
     private fun Kodein.Builder.applyUseCaseModule() {

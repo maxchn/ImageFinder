@@ -18,3 +18,7 @@ fun ImageItemDto.toImageItem(): ImageItem {
         url = this@toImageItem.url
     )
 }
+
+fun List<ImageItemDto>.toImagesItems(): List<ImageItem> {
+    return this.map { it.toImageItem() }
+}

@@ -2,7 +2,6 @@ package com.imagefinder.domain.use_case.image
 
 import com.imagefinder.domain.entity.ImageItem
 import com.imagefinder.domain.gateway.image.IImageGateway
-import com.imagefinder.storage.local.data.ImageItemDto
 import io.reactivex.Observable
 
 class ImageInteractor(
@@ -17,7 +16,7 @@ class ImageInteractor(
         gateway.saveImage(imageItem)
     }
 
-    override fun getAllImages(): Observable<List<ImageItemDto>> {
+    override fun getAllImages(): Observable<List<ImageItem>> {
         return gateway.getAllImages()
     }
 

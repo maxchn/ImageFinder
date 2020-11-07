@@ -1,7 +1,8 @@
 package com.imagefinder.storage.local.repository.image
 
 import com.imagefinder.core.presentation.useRealm
-import com.imagefinder.core.presentation.useRealmWithObservable
+import com.imagefinder.domain.common.mapper.local.toImagesItems
+import com.imagefinder.domain.entity.ImageItem
 import com.imagefinder.storage.local.data.ImageItemDto
 import com.imagefinder.storage.local.repository.common.RealmLocalStorage
 import io.reactivex.Observable
@@ -10,11 +11,18 @@ class ImageRepositoryImpl(
     private val realmStorage: RealmLocalStorage
 ) : ImageRepository {
 
-    override fun getAll(): Observable<List<ImageItemDto>> {
+    override fun getAll(): Observable<List<ImageItem>> {
         return Observable.create { emitter ->
-            realmStorage.openRealm().useRealmWithObservable(emitter) {
-                it.where(ImageItemDto::class.java)
-                    .findAll()
+            realmStorage.openRealm().useRealm { realm ->
+                try {
+                    val entries = realm.where(ImageItemDto::class.java)
+                        .findAll()
+
+                    emitter.onNext(entries.toImagesItems())
+                    emitter.onComplete()
+                } catch (e: Exception) {
+                    emitter.onError(e)
+                }
             }
         }
     }
