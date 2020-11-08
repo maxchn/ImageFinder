@@ -9,7 +9,13 @@ import org.kodein.di.generic.provider
 object MainModule {
 
     fun get() = Kodein.Module("MainModule") {
-        bind<MainContract.ViewModel>() with provider { MainViewModel(instance(), instance()) }
+        bind<MainContract.ViewModel>() with provider {
+            MainViewModel(
+                resourceReader = instance(),
+                imageUseCase = instance(),
+                networkManager = instance()
+            )
+        }
         bind<ImagesAdapter>() with provider { ImagesAdapter() }
     }
 }

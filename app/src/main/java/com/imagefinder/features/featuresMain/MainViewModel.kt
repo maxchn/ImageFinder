@@ -2,6 +2,7 @@ package com.imagefinder.features.featuresMain
 
 import androidx.lifecycle.MutableLiveData
 import com.imagefinder.R
+import com.imagefinder.core.domain.NetworkManager
 import com.imagefinder.core.domain.livedata.SingleLiveManager
 import com.imagefinder.core.presentation.ResourceReader
 import com.imagefinder.core.presentation.common.BaseViewModelImpl
@@ -16,10 +17,11 @@ import timber.log.Timber
 
 class MainViewModel(
     private val resourceReader: ResourceReader,
-    private val imageUseCase: ImageUseCase
+    private val imageUseCase: ImageUseCase,
+    override val networkManager: NetworkManager
 ) : BaseViewModelImpl(), MainContract.ViewModel {
 
-    override val images = MutableLiveData<List<ImageItem>>()
+    override val images = MutableLiveData<MutableList<ImageItem>>()
 
     override val message = SingleLiveManager<String>()
 
@@ -31,29 +33,41 @@ class MainViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
-                    images.postValue(it)
+                    images.postValue(it.reversed().toMutableList())
                 },
                 {
                     Timber.e(it)
                 }
-            )
+            ).autoDispose()
     }
 
     override fun searchImage(queryValue: String) {
         GlobalScope.launch(Dispatchers.IO) {
-            val result = imageUseCase.searchImage(queryValue)
+            try {
+                val result = imageUseCase.searchImage(queryValue)
 
-            when {
-                result.isNullOrEmpty() -> message.call(
-                    resourceReader.getString(R.string.search_image_is_not_found)
-                )
-                else -> {
-                    val randomItem = result.random()
-                    newImageItem.call(randomItem)
-
-                    imageUseCase.saveImage(randomItem)
+                when {
+                    result != null && result.isEmpty() -> showImageNotFoundMessage()
+                    result != null -> calculateAndSaveNewImageItem(result)
                 }
+            } catch (e: Exception) {
+                Timber.e(e)
             }
         }
+    }
+
+    private fun showImageNotFoundMessage() {
+        message.call(
+            resourceReader.getString(R.string.search_image_is_not_found)
+        )
+    }
+
+    private fun calculateAndSaveNewImageItem(result: List<ImageItem>) {
+        val randomItem = result.random()
+
+        imageUseCase.saveImage(randomItem)
+
+        images.value?.add(0, randomItem)
+        images.postValue(images.value)
     }
 }

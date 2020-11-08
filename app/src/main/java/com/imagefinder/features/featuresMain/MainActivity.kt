@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import com.imagefinder.R
 import com.imagefinder.core.presentation.activity.BindingActivity
+import com.imagefinder.core.presentation.hideKeyboard
 import com.imagefinder.databinding.ActivityMainBinding
 import com.imagefinder.features.featuresMain.common.ImagesAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import org.kodein.di.generic.instance
-import timber.log.Timber
-import java.util.*
 
 class MainActivity : BindingActivity<ActivityMainBinding>() {
 
@@ -24,16 +23,22 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        binding.viewModel = viewModel
+
         rv_search_history.adapter = adapter
 
         edit_text_query.setOnEditorActionListener { _, actionId, _ ->
             return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_GO) {
+                this.hideKeyboard()
                 viewModel.searchImage(edit_text_query.text.toString())
+                edit_text_query.text = null
                 true
             } else {
                 false
             }
         }
+
+        viewModel.networkManager.applyDefaultObserver(this)
 
         viewModel.images.observe(this, {
             if (it.isNotEmpty()) {
