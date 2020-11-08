@@ -43,6 +43,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         viewModel.images.observe(this, {
             if (it.isNotEmpty()) {
                 adapter.update(it)
+                rv_search_history.scrollToPosition(0)
             }
         })
 
@@ -56,6 +57,10 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
             it?.let { newImageItem ->
                 adapter.add(newImageItem)
             }
+        })
+
+        viewModel.isLoading.observe(this, {
+            showModalProgress = it ?: false
         })
     }
 }

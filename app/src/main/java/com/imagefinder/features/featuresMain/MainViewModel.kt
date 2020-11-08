@@ -26,6 +26,7 @@ class MainViewModel(
     override val message = SingleLiveManager<String>()
 
     override val newImageItem = SingleLiveManager<ImageItem>()
+    override val isLoading = SingleLiveManager<Boolean>()
 
     init {
         imageUseCase.getAllImages()
@@ -42,6 +43,8 @@ class MainViewModel(
     }
 
     override fun searchImage(queryValue: String) {
+        isLoading.call(true)
+
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val result = imageUseCase.searchImage(queryValue)
@@ -52,6 +55,8 @@ class MainViewModel(
                 }
             } catch (e: Exception) {
                 Timber.e(e)
+            } finally {
+                isLoading.call(false)
             }
         }
     }

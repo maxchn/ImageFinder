@@ -12,8 +12,10 @@ interface MainContract {
         val images: LiveData<MutableList<ImageItem>>
         val message: SingleLiveManager<String>
         val newImageItem: SingleLiveManager<ImageItem>
+        val isLoading: SingleLiveManager<Boolean>
         val networkManager: NetworkManager
 
         fun searchImage(queryValue: String)
+        fun clearSearchHistory()
     }
 }
