@@ -61,6 +61,27 @@ class MainViewModel(
         }
     }
 
+    override fun clearSearchHistory() {
+        isLoading.call(true)
+
+        try {
+            imageUseCase.removeAllImages()
+            images.postValue(mutableListOf())
+
+            message.call(
+                resourceReader.getString(R.string.clear_search_history_success)
+            )
+        } catch (e: Exception) {
+            Timber.e(e)
+
+            message.call(
+                resourceReader.getString(R.string.error_unknown)
+            )
+        } finally {
+            isLoading.call(false)
+        }
+    }
+
     private fun showImageNotFoundMessage() {
         message.call(
             resourceReader.getString(R.string.search_image_is_not_found)

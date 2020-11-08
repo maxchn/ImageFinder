@@ -3,4 +3,6 @@
     <dimen name="default_hor_margin">10dp</dimen>
     <dimen name="default_ver_margin">10dp</dimen>
     <dimen name="default_card_corner_radius">10dp</dimen>
+    <dimen name="action_button_margin">20dp</dimen>
+    <dimen name="default_elevation">10dp</dimen>
 </resources>
