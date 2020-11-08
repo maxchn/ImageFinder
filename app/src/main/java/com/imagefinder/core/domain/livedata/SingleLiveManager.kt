@@ -1,7 +1,6 @@
 package com.imagefinder.core.domain.livedata
 
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 
 class SingleLiveManager<T : Any>(val defValue: T? = null) {
     private val event = SingleLiveEvent<T>()
@@ -17,7 +16,7 @@ class SingleLiveManager<T : Any>(val defValue: T? = null) {
     }
 
     fun observe(owner: LifecycleOwner, observer: ((item: T?) -> Unit)) {
-        event.observe(owner, Observer {
+        event.observe(owner, {
             observer.invoke(it)
         })
     }
