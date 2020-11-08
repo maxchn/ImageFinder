@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_hor_margin"
         android:layout_marginEnd="@dimen/default_hor_margin"
+        android:layout_marginBottom="@dimen/default_ver_margin"
         app:cardCornerRadius="@dimen/default_card_corner_radius">
 
         <LinearLayout
@@ -26,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:imageUrl="@{item.url}"
-                tools:src="@drawable/ic_launcher_background" />
+                tools:src="@drawable/ic_placeholder" />
 
             <TextView
                 android:layout_width="match_parent"
