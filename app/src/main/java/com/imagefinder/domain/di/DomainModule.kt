@@ -15,7 +15,7 @@ object DomainModule {
 
     fun get() = Kodein.Module("DomainModule") {
 
-        bind() from singleton { NetworkManager() }
+        bind() from singleton { NetworkManager(instance()) }
 
         applyUseCaseModule()
         applyGatewayModule()
@@ -34,6 +34,7 @@ object DomainModule {
         bind<IImageGateway>() with provider {
             ImageGateway(
                 errors = instance(),
+                resourceReader = instance(),
                 local = instance(),
                 remote = instance()
             )

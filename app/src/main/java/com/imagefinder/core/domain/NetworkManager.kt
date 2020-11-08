@@ -1,11 +1,31 @@
 package com.imagefinder.core.domain
 
-import android.widget.Toast
-import androidx.fragment.app.Fragment
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.lifecycle.MutableLiveData
 import com.imagefinder.core.domain.livedata.SingleLiveManager
+import com.imagefinder.core.presentation.activity.BaseActivity
 
-class NetworkManager {
+class NetworkManager(
+    private val context: Context
+) {
+    private val connectivityManager: ConnectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+    fun isOnline(): Boolean {
+        val capabilities =
+            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+
+        return when {
+            capabilities == null -> false
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            else -> false
+        }
+    }
+
     val errors = SingleLiveManager<Error>()
 
     val processing = MutableLiveData<Boolean>().apply {
@@ -20,9 +40,9 @@ class NetworkManager {
         processing.postValue(false)
     }
 
-    fun applyDefaultObserver(fragment: Fragment) {
-        errors.observe(fragment) {
-            Toast.makeText(fragment.requireActivity(), it?.message ?: return@observe, Toast.LENGTH_SHORT).show()
+    fun applyDefaultObserver(activity: BaseActivity) {
+        errors.observe(activity) {
+            activity.showToast(it?.message ?: return@observe)
         }
     }
 }
