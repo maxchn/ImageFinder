@@ -4,6 +4,7 @@
     <string name="search_image_is_not_found">Фотография не была найдена!!!</string>
     <string name="hint_query_value">Искомое значение</string>
     <string name="hint_search_history_is_empty">Нет данных</string>
+    <string name="clear_search_history">Очистить историю поиска</string>
     <string name="clear_search_history_success">История поиска была очищена</string>
 
     <!-- Errors-->

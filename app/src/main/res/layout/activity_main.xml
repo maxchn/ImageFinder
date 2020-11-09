@@ -61,6 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/action_button_margin"
             android:layout_marginBottom="@dimen/action_button_margin"
+            android:contentDescription="@string/clear_search_history"
             android:elevation="@dimen/default_elevation"
             android:onClick="@{() -> viewModel.clearSearchHistory()}"
             android:visibility="@{viewModel.images.size() != 0 ? View.VISIBLE : View.GONE}"

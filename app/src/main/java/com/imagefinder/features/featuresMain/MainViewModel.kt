@@ -25,7 +25,6 @@ class MainViewModel(
 
     override val message = SingleLiveManager<String>()
 
-    override val newImageItem = SingleLiveManager<ImageItem>()
     override val isLoading = SingleLiveManager<Boolean>()
 
     init {
@@ -64,21 +63,23 @@ class MainViewModel(
     override fun clearSearchHistory() {
         isLoading.call(true)
 
-        try {
-            imageUseCase.removeAllImages()
-            images.postValue(mutableListOf())
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                imageUseCase.removeAllImages()
+                images.postValue(mutableListOf())
 
-            message.call(
-                resourceReader.getString(R.string.clear_search_history_success)
-            )
-        } catch (e: Exception) {
-            Timber.e(e)
+                message.call(
+                    resourceReader.getString(R.string.clear_search_history_success)
+                )
+            } catch (e: Exception) {
+                Timber.e(e)
 
-            message.call(
-                resourceReader.getString(R.string.error_unknown)
-            )
-        } finally {
-            isLoading.call(false)
+                message.call(
+                    resourceReader.getString(R.string.error_unknown)
+                )
+            } finally {
+                isLoading.call(false)
+            }
         }
     }
 

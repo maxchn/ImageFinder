@@ -53,12 +53,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
             }
         })
 
-        viewModel.newImageItem.observe(this, {
-            it?.let { newImageItem ->
-                adapter.add(newImageItem)
-            }
-        })
-
         viewModel.isLoading.observe(this, {
             showModalProgress = it ?: false
         })

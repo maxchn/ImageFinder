@@ -40,9 +40,4 @@ class ImagesAdapter : RecyclerView.Adapter<ImageItemViewHolder>() {
 
         diff.dispatchUpdatesTo(this)
     }
-
-    fun add(newImageItem: ImageItem) {
-        items.add(newImageItem)
-        notifyItemInserted(items.size - 1)
-    }
 }

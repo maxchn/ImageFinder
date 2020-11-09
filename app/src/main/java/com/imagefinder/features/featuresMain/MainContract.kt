@@ -11,7 +11,6 @@ interface MainContract {
     interface ViewModel : BaseViewModel {
         val images: LiveData<MutableList<ImageItem>>
         val message: SingleLiveManager<String>
-        val newImageItem: SingleLiveManager<ImageItem>
         val isLoading: SingleLiveManager<Boolean>
         val networkManager: NetworkManager
 
